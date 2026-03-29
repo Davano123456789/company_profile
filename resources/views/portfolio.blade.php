@@ -192,81 +192,37 @@
       <button class="filter-btn active" data-cat="all" onclick="doFilter('all',this)">
         <span class="fdot" style="background:#0284c7"></span>Semua Pekerjaan
       </button>
-      <button class="filter-btn" data-cat="ac" onclick="doFilter('ac',this)">
-        <span class="fdot" style="background:#0284c7"></span>Cleaning / Service AC
+      @foreach($categories as $cat)
+      <button class="filter-btn" data-cat="cat-{{ $cat->id }}" onclick="doFilter('cat-{{ $cat->id }}',this)">
+        <span class="fdot" style="background:#0284c7"></span>{{ $cat->name }}
       </button>
-      <button class="filter-btn" data-cat="plafon" onclick="doFilter('plafon',this)">
-        <span class="fdot" style="background:#7c3aed"></span>Renovasi Plafon & Dinding
-      </button>
-      <button class="filter-btn" data-cat="kantor" onclick="doFilter('kantor',this)">
-        <span class="fdot" style="background:#059669"></span>Renovasi Kantor
-      </button>
-      <button class="filter-btn" data-cat="lampu" onclick="doFilter('lampu',this)">
-        <span class="fdot" style="background:#d97706"></span>Lampu (ME) & Genset
-      </button>
-      <button class="filter-btn" data-cat="lantai" onclick="doFilter('lantai',this)">
-        <span class="fdot" style="background:#db2777"></span>Perbaikan Lantai
-      </button>
+      @endforeach
     </div>
 
-    @php
-      $projects = [
-        ['cat' => 'ac', 'title' => 'Servis Unit Outdoor AC Kapasitas Besar', 'lbl' => 'Cleaning / Service AC', 'class' => 'ac', 'icon' => 'fa-snowflake', 'text_cat' => 'Service AC'],
-        ['cat' => 'ac', 'title' => 'Perawatan Chiller Rooftop', 'lbl' => 'Cleaning / Service AC', 'class' => 'ac', 'icon' => 'fa-snowflake', 'text_cat' => 'Service AC'],
-        ['cat' => 'ac', 'title' => 'Servis AC Spit Duck Lt. 1', 'lbl' => 'Cleaning / Service AC', 'class' => 'ac', 'icon' => 'fa-snowflake', 'text_cat' => 'Service AC'],
-        ['cat' => 'ac', 'title' => 'Perbaikan Komponen & Board AC', 'lbl' => 'Cleaning / Service AC', 'class' => 'ac', 'icon' => 'fa-snowflake', 'text_cat' => 'Service AC'],
-        ['cat' => 'ac', 'title' => 'Servis AC Tipe Cassette Ceiling', 'lbl' => 'Cleaning / Service AC', 'class' => 'ac', 'icon' => 'fa-snowflake', 'text_cat' => 'Service AC'],
-        ['cat' => 'ac', 'title' => 'Pengisian Refrigerant Musicool', 'lbl' => 'Cleaning / Service AC', 'class' => 'ac', 'icon' => 'fa-snowflake', 'text_cat' => 'Service AC'],
-        ['cat' => 'ac', 'title' => 'Cleaning Unit Indoor AC', 'lbl' => 'Cleaning / Service AC', 'class' => 'ac', 'icon' => 'fa-snowflake', 'text_cat' => 'Service AC'],
-        ['cat' => 'ac', 'title' => 'Pengecekan & Tune-up Sistem AC', 'lbl' => 'Cleaning / Service AC', 'class' => 'ac', 'icon' => 'fa-snowflake', 'text_cat' => 'Service AC'],
-        ['cat' => 'ac', 'title' => 'Pemasangan Unit AC Baru', 'lbl' => 'Cleaning / Service AC', 'class' => 'ac', 'icon' => 'fa-snowflake', 'text_cat' => 'Service AC'],
-        
-        ['cat' => 'plafon', 'title' => 'Pemasangan Plafon Desain Lingkaran', 'lbl' => 'Renovasi Plafon & Dinding', 'class' => 'plafon', 'icon' => 'fa-border-all', 'text_cat' => 'Plafon & Dinding'],
-        ['cat' => 'plafon', 'title' => 'Finishing & Pengecatan Plafon Gypsum', 'lbl' => 'Renovasi Plafon & Dinding', 'class' => 'plafon', 'icon' => 'fa-border-all', 'text_cat' => 'Plafon & Dinding'],
-        ['cat' => 'plafon', 'title' => 'Pemasangan Wallpaper Dinding', 'lbl' => 'Renovasi Plafon & Dinding', 'class' => 'plafon', 'icon' => 'fa-border-all', 'text_cat' => 'Plafon & Dinding'],
-        ['cat' => 'plafon', 'title' => 'Renovasi Dinding & Partisi Showroom', 'lbl' => 'Renovasi Plafon & Dinding', 'class' => 'plafon', 'icon' => 'fa-border-all', 'text_cat' => 'Plafon & Dinding'],
-        ['cat' => 'plafon', 'title' => 'Plafon & Pencahayaan Showroom', 'lbl' => 'Renovasi Plafon & Dinding', 'class' => 'plafon', 'icon' => 'fa-border-all', 'text_cat' => 'Plafon & Dinding'],
-        
-        ['cat' => 'kantor', 'title' => 'Renovasi Interior Ruang Kerja', 'lbl' => 'Renovasi Kantor', 'class' => 'kantor', 'icon' => 'fa-building', 'text_cat' => 'Renovasi Kantor'],
-        ['cat' => 'kantor', 'title' => 'Pemasangan Furnitur Built-in', 'lbl' => 'Renovasi Kantor', 'class' => 'kantor', 'icon' => 'fa-building', 'text_cat' => 'Renovasi Kantor'],
-        ['cat' => 'kantor', 'title' => 'Pemasangan Kaca & Partisi Kantor', 'lbl' => 'Renovasi Kantor', 'class' => 'kantor', 'icon' => 'fa-building', 'text_cat' => 'Renovasi Kantor'],
-        ['cat' => 'kantor', 'title' => 'Pemasangan Karpet & Vertical Blind', 'lbl' => 'Renovasi Kantor', 'class' => 'kantor', 'icon' => 'fa-building', 'text_cat' => 'Renovasi Kantor'],
-        ['cat' => 'kantor', 'title' => 'Finishing Total Ruang Kantor', 'lbl' => 'Renovasi Kantor', 'class' => 'kantor', 'icon' => 'fa-building', 'text_cat' => 'Renovasi Kantor'],
-        ['cat' => 'kantor', 'title' => 'Pengecatan Ulang Area Kantor', 'lbl' => 'Renovasi Kantor', 'class' => 'kantor', 'icon' => 'fa-building', 'text_cat' => 'Renovasi Kantor'],
-        
-        ['cat' => 'lampu', 'title' => 'Instalasi Lampu Gudang & Workshop', 'lbl' => 'Lampu (ME) & Genset', 'class' => 'lampu', 'icon' => 'fa-lightbulb', 'text_cat' => 'Lampu & Genset'],
-        ['cat' => 'lampu', 'title' => 'Pemasangan Neon Box Showroom Daihatsu', 'lbl' => 'Lampu (ME) & Genset', 'class' => 'lampu', 'icon' => 'fa-lightbulb', 'text_cat' => 'Lampu & Genset'],
-        ['cat' => 'lampu', 'title' => 'Instalasi Panel & Wiring Listrik', 'lbl' => 'Lampu (ME) & Genset', 'class' => 'lampu', 'icon' => 'fa-lightbulb', 'text_cat' => 'Lampu & Genset'],
-        ['cat' => 'lampu', 'title' => 'Perawatan & Perbaikan Genset', 'lbl' => 'Lampu (ME) & Genset', 'class' => 'lampu', 'icon' => 'fa-lightbulb', 'text_cat' => 'Lampu & Genset'],
-        ['cat' => 'lampu', 'title' => 'Instalasi Lampu Area FedEx & Industri', 'lbl' => 'Lampu (ME) & Genset', 'class' => 'lampu', 'icon' => 'fa-lightbulb', 'text_cat' => 'Lampu & Genset'],
-        
-        ['cat' => 'lantai', 'title' => 'Bongkar Pasang Keramik Lantai', 'lbl' => 'Perbaikan Lantai', 'class' => 'lantai', 'icon' => 'fa-layer-group', 'text_cat' => 'Perbaikan Lantai'],
-        ['cat' => 'lantai', 'title' => 'Screed & Leveling Permukaan Lantai', 'lbl' => 'Perbaikan Lantai', 'class' => 'lantai', 'icon' => 'fa-layer-group', 'text_cat' => 'Perbaikan Lantai'],
-        ['cat' => 'lantai', 'title' => 'Pengukuran & Pemasangan Keramik Baru', 'lbl' => 'Perbaikan Lantai', 'class' => 'lantai', 'icon' => 'fa-layer-group', 'text_cat' => 'Perbaikan Lantai'],
-        ['cat' => 'lantai', 'title' => 'Perbaikan Lantai Area Showroom', 'lbl' => 'Perbaikan Lantai', 'class' => 'lantai', 'icon' => 'fa-layer-group', 'text_cat' => 'Perbaikan Lantai'],
-        ['cat' => 'lantai', 'title' => 'Finishing Nat & Poles Lantai', 'lbl' => 'Perbaikan Lantai', 'class' => 'lantai', 'icon' => 'fa-layer-group', 'text_cat' => 'Perbaikan Lantai'],
-        ['cat' => 'lantai', 'title' => 'Perbaikan Lantai & Pemasangan Partisi', 'lbl' => 'Perbaikan Lantai', 'class' => 'lantai', 'icon' => 'fa-layer-group', 'text_cat' => 'Perbaikan Lantai'],
-      ];
-    @endphp
+
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" id="projGrid">
-      @foreach($projects as $index => $p)
-      <div class="proj-card reveal d{{ ($index % 6) + 1 }}" data-cat="{{ $p['cat'] }}" data-title="{{ $p['title'] }}">
+      @forelse($projects as $index => $p)
+      <div class="proj-card reveal d{{ ($index % 6) + 1 }}" data-cat="cat-{{ $p->project_category_id }}" data-title="{{ $p->title }}">
         <div class="proj-img" onclick="openLb(this)">
-          <img src="{{ asset('images/portofolio/portofolio_1.jpg') }}" alt="{{ $p['title'] }}"/>
-          <div class="cat-ribbon cat-{{ $p['class'] }}"><i class="fa-solid {{ $p['icon'] }} mr-1"></i> {{ $p['text_cat'] }}</div>
+          @if($p->image)
+            <img src="{{ asset('storage/' . $p->image) }}" alt="{{ $p->title }}"/>
+          @else
+            <div class="w-full h-full bg-slate-100 flex items-center justify-center">
+              <i class="fa-solid fa-image text-slate-300 text-4xl"></i>
+            </div>
+          @endif
+          <div class="cat-ribbon bg-[#0284c7] text-white">
+            <i class="fa-solid fa-folder mr-1 text-[10px]"></i> {{ $p->category->name ?? 'Project' }}
+          </div>
         </div>
         <div class="proj-body">
-          <div class="proj-cat-lbl" style="color: {{ 
-            $p['cat'] == 'ac' ? '#0284c7' : (
-            $p['cat'] == 'plafon' ? '#6d28d9' : (
-            $p['cat'] == 'kantor' ? '#047857' : (
-            $p['cat'] == 'lampu' ? '#92400e' : '#be185d'
-          ))) }}">{{ $p['lbl'] }}</div>
-          <div class="proj-title">{{ $p['title'] }}</div>
+          <div class="proj-cat-lbl text-[#0284c7]">{{ $p->category->name ?? 'Project' }}</div>
+          <div class="proj-title line-clamp-2">{{ $p->title }}</div>
         </div>
       </div>
-      @endforeach
+      @empty
+      @endforelse
     </div><!-- /grid -->
 
     <!-- EMPTY STATE -->

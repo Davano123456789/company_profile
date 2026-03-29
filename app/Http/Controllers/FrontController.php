@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
+use App\Models\Project;
+use App\Models\ProjectCategory;
 use Illuminate\Http\Request;
 
 class FrontController extends Controller
 {
     public function index()
     {
-        return view('home');
+        return view('home', [
+            'projects'   => Project::with('category')->latest()->take(6)->get(),
+            'clients'    => Client::latest()->get(),
+            'categories' => ProjectCategory::all()
+        ]);
     }
 
     public function about()
@@ -23,12 +30,17 @@ class FrontController extends Controller
 
     public function portfolio()
     {
-        return view('portfolio');
+        return view('portfolio', [
+            'projects'   => Project::with('category')->latest()->get(),
+            'categories' => ProjectCategory::all()
+        ]);
     }
 
     public function clients()
     {
-        return view('clients');
+        return view('clients', [
+            'clients' => Client::latest()->get()
+        ]);
     }
 
     public function certifications()

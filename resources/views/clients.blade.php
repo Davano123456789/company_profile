@@ -119,43 +119,27 @@
 
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
 
-      @php
-        $clients = [
-            ['name' => 'PT. Astra International (Astra World)', 'loc' => 'Jl. H.R. Muhammad, Surabaya'],
-            ['name' => 'PT. Astra International (BMW) - Surabaya', 'loc' => 'Jl. H.R. Muhammad, Surabaya'],
-            ['name' => 'PT. Astra International (BMW) - Malang', 'loc' => 'Malang'],
-            ['name' => 'PT. Astra International (Daihatsu) - Aloha', 'loc' => 'Jl. Raya Aloha, Waru Sidoarjo'],
-            ['name' => 'PT. Astra International (Daihatsu) - Jenggolo', 'loc' => 'Jl. Jenggolo, Sidoarjo'],
-            ['name' => 'PT. Astra International (Daihatsu) - Trosobo', 'loc' => 'Jl. Trosobo, Sidoarjo'],
-            ['name' => 'PT. Astra International (ISUZU)', 'loc' => 'Jl. Raya Aloha, Waru Sidoarjo'],
-            ['name' => 'PT. Astra International (UD. Trucks) - Kenjeran', 'loc' => 'Surabaya'],
-            ['name' => 'PT. Astra International (UD. Trucks) - Romokalisari', 'loc' => 'Surabaya'],
-            ['name' => 'Bank Mandiri Prioritas', 'loc' => 'Surabaya'],
-            ['name' => 'Bank Mandiri KCP Krian', 'loc' => 'Sidoarjo'],
-            ['name' => 'Bank Mandiri KCP Jemursari', 'loc' => 'Surabaya'],
-            ['name' => 'BPJS Kesehatan Div. Regional VII', 'loc' => 'Jawa Timur'],
-            ['name' => 'PT. FedEx International / TNT', 'loc' => 'Surabaya'],
-            ['name' => 'PT. Geodis Wilson Indonesia', 'loc' => 'Surabaya'],
-            ['name' => 'PT. Sompo Insurance', 'loc' => 'Surabaya'],
-            ['name' => 'PT. Daesang Ingredients Indonesia', 'loc' => 'Surabaya'],
-            ['name' => 'PT. Sekawan Intiplast', 'loc' => 'Surabaya'],
-            ['name' => 'PT. Wahana Wirawan (Nissan)', 'loc' => 'Surabaya'],
-            ['name' => 'PT. United Indo Surabaya', 'loc' => 'Surabaya'],
-        ];
-      @endphp
 
-      @foreach($clients as $index => $client)
+
+      @forelse($clients as $index => $client)
       <div class="client-card reveal d{{ ($index % 6) + 1 }}">
         <div class="logo-wrap">
-          <img src="{{ asset('images/client_' . (($index % 2) + 1) . '.jpg') }}" alt="{{ $client['name'] }}" />
+          @if($client->logo)
+            <img src="{{ asset('storage/' . $client->logo) }}" alt="{{ $client->name }}" />
+          @else
+            <div class="w-full h-full bg-slate-100 flex items-center justify-center">
+              <i class="fa-solid fa-building text-slate-300 text-3xl"></i>
+            </div>
+          @endif
         </div>
         <div class="card-body">
           <div class="card-num">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</div>
-          <div class="card-name">{{ $client['name'] }}</div>
-          <div class="card-loc">{{ $client['loc'] }}</div>
+          <div class="card-name line-clamp-2">{{ $client->name }}</div>
+          <div class="card-loc line-clamp-1">{{ $client->location ?? 'Indonesia' }}</div>
         </div>
       </div>
-      @endforeach
+      @empty
+      @endforelse
 
     </div><!-- /grid -->
   </div>

@@ -181,6 +181,49 @@
   </div>
 </section>
 
+<!-- LATEST PROJECTS -->
+<section id="proyek" class="py-24" style="background:#f8fafc">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row justify-between items-end mb-12 reveal">
+      <div>
+        <div class="section-tag mb-4">Portofolio Pekerjaan</div>
+        <h2 class="section-title mb-0">Proyek <span class="grad-text">Terbaru</span></h2>
+      </div>
+      <a href="{{ route('portfolio') }}" class="mt-6 md:mt-0 text-sm font-bold text-[#0284c7] hover:underline flex items-center gap-2">
+        Lihat Semua Proyek <i class="fa-solid fa-arrow-right-long"></i>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      @forelse($projects as $index => $project)
+      <div class="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-sky-300 transition-all hover:-translate-y-2 reveal d{{ ($index % 3) + 1 }}">
+        <div class="aspect-[4/3] overflow-hidden relative">
+          @if($project->image)
+            <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+          @else
+            <div class="w-full h-full bg-slate-100 flex items-center justify-center">
+              <i class="fa-solid fa-image text-slate-300 text-4xl"></i>
+            </div>
+          @endif
+          <div class="absolute top-4 left-4">
+            <span class="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-white/90 backdrop-blur-sm shadow-sm" style="color:#0284c7">
+              {{ $project->category->name ?? 'Pekerjaan Umum' }}
+            </span>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 class="font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-sky-600 transition-colors">{{ $project->title }}</h3>
+        </div>
+      </div>
+      @empty
+      <div class="col-span-full text-center py-10">
+        <p class="text-slate-400">Belum ada proyek yang ditampilkan.</p>
+      </div>
+      @endforelse
+    </div>
+  </div>
+</section>
+
 <!-- CLIENTS -->
 <section id="klien" class="py-24" style="background:#f0f9ff">
   <div class="max-w-7xl mx-auto px-6">
@@ -189,27 +232,17 @@
       <h2 class="section-title mb-3">Klien & Mitra <span class="grad-text">Kerja</span></h2>
       <p class="text-sm max-w-lg mx-auto" style="color:#64748b">Kami bangga telah dipercaya oleh berbagai perusahaan nasional dan multinasional di Jawa Timur.</p>
     </div>
-    <div class="flex flex-wrap gap-3 justify-center reveal">
-      <div class="client-item">PT. Astra International (BMW)</div>
-      <div class="client-item">PT. Astra International (Daihatsu)</div>
-      <div class="client-item">PT. Astra International (ISUZU)</div>
-      <div class="client-item">PT. Astra International (UD. Trucks)</div>
-      <div class="client-item">Bank Mandiri Prioritas</div>
-      <div class="client-item">Bank Mandiri KCP Krian</div>
-      <div class="client-item">Bank Mandiri KCP Jemursari</div>
-      <div class="client-item">BPJS Kesehatan Div. Regional VII</div>
-      <div class="client-item">PT. FedEx International / TNT</div>
-      <div class="client-item">PT. Geodis Wilson Indonesia</div>
-      <div class="client-item">PT. Sompo Insurance</div>
-      <div class="client-item">PT. Daesang Ingredients Indonesia</div>
-      <div class="client-item">PT. Sekawan Intiplast</div>
-      <div class="client-item">PT. Wahana Wirawan (Nissan)</div>
-      <div class="client-item">PT. United Indo Surabaya</div>
-      <div class="client-item">SMPN 49 Surabaya</div>
-      <div class="client-item">Dinas Koperasi / Disperindag</div>
-      <div class="client-item">Badan Kepegawaian Negara Reg. II</div>
-      <div class="client-item">PT. Asco Prima Mobilindo</div>
-      <div class="client-item">PT. Sampoerna Jaya Baja</div>
+    <div class="flex flex-wrap gap-4 justify-center reveal">
+      @forelse($clients as $client)
+        <div class="group bg-white px-6 py-4 rounded-xl border border-sky-100 shadow-sm hover:shadow-md hover:border-sky-300 transition-all flex items-center gap-4">
+          @if($client->logo)
+            <img src="{{ asset('storage/' . $client->logo) }}" alt="{{ $client->name }}" class="h-8 w-auto grayscale group-hover:grayscale-0 transition-all">
+          @endif
+          <span class="text-sm font-bold text-slate-600 group-hover:text-sky-700">{{ $client->name }}</span>
+        </div>
+      @empty
+        <p class="text-slate-400">Belum ada data klien.</p>
+      @endforelse
     </div>
   </div>
 </section>
