@@ -24,38 +24,41 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // ─── DASHBOARD ───────────────────────────────────────────────────────────────
+// prefix adalah untuk membuat url menjadi /admin/...
+// name adalah untuk membuat nama route menjadi dashboard.index
+// middleware adalah untuk membuat route menjadi private
 Route::prefix('admin')->name('dashboard.')->middleware('auth')->group(function () {
 
     Route::get('/', [DashboardController::class, 'index'])->name('index');
 
     // Clients
     Route::prefix('clients')->name('clients.')->group(function () {
-        Route::get('/',          [DashboardController::class, 'clientsIndex'])->name('index');
-        Route::get('/create',    [DashboardController::class, 'clientsCreate'])->name('create');
-        Route::post('/',         [DashboardController::class, 'clientsStore'])->name('store');
-        Route::get('/{client}/edit',   [DashboardController::class, 'clientsEdit'])->name('edit');
-        Route::put('/{client}',        [DashboardController::class, 'clientsUpdate'])->name('update');
-        Route::delete('/{client}',     [DashboardController::class, 'clientsDestroy'])->name('destroy');
+        Route::get('/', [DashboardController::class, 'clientsIndex'])->name('index');
+        Route::get('/create', [DashboardController::class, 'clientsCreate'])->name('create');
+        Route::post('/', [DashboardController::class, 'clientsStore'])->name('store');
+        Route::get('/{client}/edit', [DashboardController::class, 'clientsEdit'])->name('edit');
+        Route::put('/{client}', [DashboardController::class, 'clientsUpdate'])->name('update');
+        Route::delete('/{client}', [DashboardController::class, 'clientsDestroy'])->name('destroy');
     });
 
     // Projects
     Route::prefix('projects')->name('projects.')->group(function () {
-        Route::get('/',          [DashboardController::class, 'projectsIndex'])->name('index');
-        Route::get('/create',    [DashboardController::class, 'projectsCreate'])->name('create');
-        Route::post('/',         [DashboardController::class, 'projectsStore'])->name('store');
-        Route::get('/{project}/edit',   [DashboardController::class, 'projectsEdit'])->name('edit');
-        Route::put('/{project}',        [DashboardController::class, 'projectsUpdate'])->name('update');
-        Route::delete('/{project}',     [DashboardController::class, 'projectsDestroy'])->name('destroy');
+        Route::get('/', [DashboardController::class, 'projectsIndex'])->name('index');
+        Route::get('/create', [DashboardController::class, 'projectsCreate'])->name('create');
+        Route::post('/', [DashboardController::class, 'projectsStore'])->name('store');
+        Route::get('/{project}/edit', [DashboardController::class, 'projectsEdit'])->name('edit');
+        Route::put('/{project}', [DashboardController::class, 'projectsUpdate'])->name('update');
+        Route::delete('/{project}', [DashboardController::class, 'projectsDestroy'])->name('destroy');
     });
 
     // Project Categories
     Route::prefix('project-categories')->name('project-categories.')->group(function () {
-        Route::get('/',                             [DashboardController::class, 'categoriesIndex'])->name('index');
-        Route::get('/create',                       [DashboardController::class, 'categoriesCreate'])->name('create');
-        Route::post('/',                            [DashboardController::class, 'categoriesStore'])->name('store');
-        Route::get('/{projectCategory}/edit',       [DashboardController::class, 'categoriesEdit'])->name('edit');
-        Route::put('/{projectCategory}',            [DashboardController::class, 'categoriesUpdate'])->name('update');
-        Route::delete('/{projectCategory}',         [DashboardController::class, 'categoriesDestroy'])->name('destroy');
+        Route::get('/', [DashboardController::class, 'categoriesIndex'])->name('index');
+        Route::get('/create', [DashboardController::class, 'categoriesCreate'])->name('create');
+        Route::post('/', [DashboardController::class, 'categoriesStore'])->name('store');
+        Route::get('/{projectCategory}/edit', [DashboardController::class, 'categoriesEdit'])->name('edit');
+        Route::put('/{projectCategory}', [DashboardController::class, 'categoriesUpdate'])->name('update');
+        Route::delete('/{projectCategory}', [DashboardController::class, 'categoriesDestroy'])->name('destroy');
     });
 
 });
