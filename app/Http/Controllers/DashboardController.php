@@ -13,9 +13,11 @@ class DashboardController extends Controller
     // ─── HOME ────────────────────────────────────────────────────────────────
     public function index()
     {
+
         return view('dashboard.index', [
-            'totalClients'    => Client::count(),
-            'totalProjects'   => Project::count(),
+            // menghitung jumlah data
+            'totalClients' => Client::count(),
+            'totalProjects' => Project::count(),
             'totalCategories' => ProjectCategory::count(),
         ]);
     }
@@ -23,22 +25,25 @@ class DashboardController extends Controller
     // ─── CLIENTS ─────────────────────────────────────────────────────────────
     public function clientsIndex()
     {
+        // mengambil semua data dari tabel clients
         return view('dashboard.clients.index', ['clients' => Client::latest()->get()]);
     }
 
     public function clientsCreate()
     {
+        // menampilkan halaman create
         return view('dashboard.clients.add');
     }
 
     public function clientsStore(Request $request)
     {
+        // validasi
         $data = $request->validate([
-            'name'     => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'location' => 'nullable|string|max:255',
-            'logo'     => 'nullable|image|max:2048',
+            'logo' => 'nullable|image|max:2048',
         ]);
-
+        // menyimpan logo storage/app/public/clients
         if ($request->hasFile('logo')) {
             $data['logo'] = $request->file('logo')->store('clients', 'public');
         }
@@ -56,9 +61,9 @@ class DashboardController extends Controller
     public function clientsUpdate(Request $request, Client $client)
     {
         $data = $request->validate([
-            'name'     => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'location' => 'nullable|string|max:255',
-            'logo'     => 'nullable|image|max:2048',
+            'logo' => 'nullable|image|max:2048',
         ]);
 
         if ($request->hasFile('logo')) {
@@ -66,6 +71,7 @@ class DashboardController extends Controller
             if ($client->logo) {
                 Storage::disk('public')->delete($client->logo);
             }
+            // ganti dengan yang baru
             $data['logo'] = $request->file('logo')->store('clients', 'public');
         }
 
@@ -74,6 +80,7 @@ class DashboardController extends Controller
         return redirect()->route('dashboard.clients.index')->with('success', 'Klien berhasil diperbarui.');
     }
 
+    // menyimpan id client sesuai pilihan
     public function clientsDestroy(Client $client)
     {
         if ($client->logo) {
@@ -94,18 +101,20 @@ class DashboardController extends Controller
     public function projectsCreate()
     {
         return view('dashboard.projects.add', [
+            // mengambil data kategori project
             'categories' => ProjectCategory::all(),
         ]);
     }
 
     public function projectsStore(Request $request)
     {
+        // validasi inputan
         $data = $request->validate([
-            'title'               => 'required|string|max:255',
+            'title' => 'required|string|max:255',
             'project_category_id' => 'required|exists:project_categories,id',
-            'image'               => 'required|image|max:5120',
+            'image' => 'required|image|max:5120',
         ]);
-
+        // menyimpan gambar
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('projects', 'public');
         }
@@ -118,7 +127,7 @@ class DashboardController extends Controller
     public function projectsEdit(Project $project)
     {
         return view('dashboard.projects.edit', [
-            'project'    => $project,
+            'project' => $project,
             'categories' => ProjectCategory::all(),
         ]);
     }
@@ -126,9 +135,9 @@ class DashboardController extends Controller
     public function projectsUpdate(Request $request, Project $project)
     {
         $data = $request->validate([
-            'title'               => 'required|string|max:255',
+            'title' => 'required|string|max:255',
             'project_category_id' => 'required|exists:project_categories,id',
-            'image'               => 'nullable|image|max:5120',
+            'image' => 'nullable|image|max:5120',
         ]);
 
         if ($request->hasFile('image')) {
