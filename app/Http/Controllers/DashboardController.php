@@ -145,6 +145,7 @@ class DashboardController extends Controller
             if ($project->image) {
                 Storage::disk('public')->delete($project->image);
             }
+            // masukan gambar baru
             $data['image'] = $request->file('image')->store('projects', 'public');
         }
 
@@ -198,5 +199,97 @@ class DashboardController extends Controller
     {
         $projectCategory->delete();
         return redirect()->route('dashboard.project-categories.index')->with('success', 'Kategori berhasil dihapus.');
+    }
+
+    // ─── ORDERS (ADMIN) ───────────────────────────────────────────────────────
+    public function ordersIndex()
+    {
+        $orders = \App\Models\Order::with(['user', 'service'])->latest()->get();
+        return view('dashboard.orders.index', compact('orders'));
+    }
+
+    public function ordersConfirm(\App\Models\Order $order)
+    {
+        if ($order->status === 'pending') {
+            $order->update(['status' => 'in_progress']);
+            return back()->with('success', 'Pesanan telah dikonfirmasi dan status menjadi dikerjakan.');
+        }
+        return back()->withErrors('Pesanan tidak dapat dikonfirmasi.');
+    }
+
+    public function ordersComplete(\App\Models\Order $order)
+    {
+        if ($order->status === 'in_progress') {
+            $order->update(['status' => 'completed']);
+            return back()->with('success', 'Pesanan telah berhasil diselesaikan.');
+        }
+        return back()->withErrors('Pesanan tidak dapat diselesaikan.');
+    }
+
+    public function ordersReject(\App\Models\Order $order)
+    {
+        if ($order->status === 'pending') {
+            $order->update(['status' => 'rejected']);
+            return back()->with('success', 'Pesanan telah ditolak.');
+        }
+        return back()->withErrors('Pesanan tidak dapat ditolak.');
+    }
+    // ─── SERVICES (ADMIN) ─────────────────────────────────────────────────────
+    public function servicesIndex()
+    {
+        $services = \App\Models\Service::latest()->get();
+        return view('dashboard.services.index', compact('services'));
+    }
+
+    public function servicesCreate()
+    {
+        return view('dashboard.services.add');
+    }
+
+    public function servicesStore(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'nullable|numeric|min:0',
+            'image' => 'nullable|image|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('services', 'public');
+        }
+
+        \App\Models\Service::create($data);
+        return redirect()->route('dashboard.services.index')->with('success', 'Layanan berhasil ditambahkan.');
+    }
+
+    public function servicesEdit(\App\Models\Service $service)
+    {
+        return view('dashboard.services.edit', compact('service'));
+    }
+
+    public function servicesUpdate(Request $request, \App\Models\Service $service)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'nullable|numeric|min:0',
+            'image' => 'nullable|image|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            if ($service->image) Storage::disk('public')->delete($service->image);
+            $data['image'] = $request->file('image')->store('services', 'public');
+        }
+
+        $service->update($data);
+        return redirect()->route('dashboard.services.index')->with('success', 'Layanan berhasil diperbarui.');
+    }
+
+    public function servicesDestroy(\App\Models\Service $service)
+    {
+        if ($service->image) Storage::disk('public')->delete($service->image);
+        $service->delete();
+        return redirect()->route('dashboard.services.index')->with('success', 'Layanan berhasil dihapus.');
     }
 }

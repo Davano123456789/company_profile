@@ -15,11 +15,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Menghapus semua data user yang ada agar tidak duplikat
+        User::query()->delete();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Membuat akun Admin Default
+        User::create([
+            'name' => 'Admin Transtech',
+            'email' => 'admin@gmail.com',
+            'password' => \Illuminate\Support\Facades\Hash::make('rahasia123'),
+            'role' => 'admin',
         ]);
     }
 }

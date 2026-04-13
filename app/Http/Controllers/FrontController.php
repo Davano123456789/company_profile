@@ -12,8 +12,8 @@ class FrontController extends Controller
     public function index()
     {
         return view('home', [
-            'projects'   => Project::with('category')->latest()->take(6)->get(),
-            'clients'    => Client::latest()->get(),
+            'projects' => Project::with('category')->latest()->take(6)->get(),
+            'clients' => Client::latest()->get(),
             'categories' => ProjectCategory::all()
         ]);
     }
@@ -31,7 +31,9 @@ class FrontController extends Controller
     public function portfolio()
     {
         return view('portfolio', [
-            'projects'   => Project::with('category')->latest()->get(),
+            // ambil semua projek sama kategorynya juga
+            'projects' => Project::with('category')->latest()->get(),
+            // ambil semua kategory
             'categories' => ProjectCategory::all()
         ]);
     }

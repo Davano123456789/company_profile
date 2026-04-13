@@ -12,9 +12,17 @@
       <a href="{{ route('home') }}#layanan" class="text-sm font-semibold transition-colors text-[#334e68]" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='#334e68'">Layanan</a>
       <a href="{{ route('portfolio') }}" class="text-sm font-semibold transition-colors {{ request()->routeIs('portfolio') ? 'text-[#0284c7]' : 'text-[#334e68]' }}" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='{{ request()->routeIs('portfolio') ? '#0284c7' : '#334e68' }}'">Proyek</a>
       <a href="{{ route('clients') }}" class="text-sm font-semibold transition-colors {{ request()->routeIs('clients') ? 'text-[#0284c7]' : 'text-[#334e68]' }}" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='{{ request()->routeIs('clients') ? '#0284c7' : '#334e68' }}'">Klien</a>
-      <a href="{{ route('contact') }}" class="text-sm font-semibold transition-colors {{ request()->routeIs('contact') ? 'text-[#0284c7]' : 'text-[#334e68]' }}" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='{{ request()->routeIs('contact') ? '#0284c7' : '#334e68' }}'">Kontak</a>
+      <a href="{{ route('pesan-jasa') }}" class="text-sm font-semibold transition-colors {{ request()->routeIs('pesan-jasa') ? 'text-[#0284c7]' : 'text-[#334e68]' }}" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='{{ request()->routeIs('pesan-jasa') ? '#0284c7' : '#334e68' }}'">Pesan Jasa</a>
       @auth
-        <a href="{{ route('dashboard.index') }}" class="text-sm font-bold px-4 py-2 rounded-lg text-[#0284c7] bg-[#f0f9ff] border border-[#bae6fd] hover:bg-[#e0f2fe] transition-all">Dashboard</a>
+        @if(auth()->user()->role === 'admin')
+          <a href="{{ route('dashboard.index') }}" class="text-sm font-bold px-4 py-2 rounded-lg text-[#0284c7] bg-[#f0f9ff] border border-[#bae6fd] hover:bg-[#e0f2fe] transition-all">Dashboard</a>
+        @else
+          <a href="{{ route('client.dashboard') }}" class="text-sm font-bold px-4 py-2 rounded-lg text-[#0284c7] bg-[#f0f9ff] border border-[#bae6fd] hover:bg-[#e0f2fe] transition-all">Dashboard Client</a>
+        @endif
+        <form action="{{ route('logout') }}" method="POST" class="inline">
+          @csrf
+          <button type="submit" class="text-sm font-semibold text-red-600 hover:text-red-700 transition-colors">Logout</button>
+        </form>
       @else
         <a href="{{ route('login') }}" class="text-sm font-semibold text-[#334e68] hover:text-[#0284c7] transition-colors">Login</a>
       @endauth
@@ -32,6 +40,19 @@
     <a href="{{ route('home') }}#layanan" onclick="toggleMenu()" class="block px-6 py-3 text-sm font-semibold text-[#334e68]">Layanan</a>
     <a href="{{ route('portfolio') }}" onclick="toggleMenu()" class="block px-6 py-3 text-sm font-semibold {{ request()->routeIs('portfolio') ? 'text-[#0284c7]' : 'text-[#334e68]' }}">Proyek</a>
     <a href="{{ route('clients') }}" onclick="toggleMenu()" class="block px-6 py-3 text-sm font-semibold {{ request()->routeIs('clients') ? 'text-[#0284c7]' : 'text-[#334e68]' }}">Klien</a>
-    <a href="{{ route('contact') }}" onclick="toggleMenu()" class="block px-6 py-3 text-sm font-semibold {{ request()->routeIs('contact') ? 'text-[#0284c7]' : 'text-[#334e68]' }}">Kontak</a>
+    <a href="{{ route('pesan-jasa') }}" onclick="toggleMenu()" class="block px-6 py-3 text-sm font-semibold {{ request()->routeIs('pesan-jasa') ? 'text-[#0284c7]' : 'text-[#334e68]' }}">Pesan Jasa</a>
+    @auth
+      @if(auth()->user()->role === 'admin')
+        <a href="{{ route('dashboard.index') }}" onclick="toggleMenu()" class="block px-6 py-3 text-sm font-semibold text-[#0284c7]">Dashboard</a>
+      @else
+        <a href="{{ route('client.dashboard') }}" onclick="toggleMenu()" class="block px-6 py-3 text-sm font-semibold text-[#0284c7]">Dashboard Client</a>
+      @endif
+      <form action="{{ route('logout') }}" method="POST" class="px-6 py-3 border-t border-[#e0f2fe]">
+        @csrf
+        <button type="submit" class="text-sm font-bold text-red-600">Logout</button>
+      </form>
+    @else
+      <a href="{{ route('login') }}" onclick="toggleMenu()" class="block px-6 py-3 text-sm font-semibold text-[#334e68]">Login</a>
+    @endauth
   </div>
 </nav>

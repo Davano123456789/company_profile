@@ -164,10 +164,10 @@
   <div class="blob blob-2"></div>
   <div class="max-w-7xl mx-auto px-6 relative z-10 text-center">
     <div class="page-tag mb-6" style="animation:fadeUp 0.5s ease both">
-        <i class="fa-solid fa-phone-volume mr-2"></i> Hubungi Kami
+        <i class="fa-solid fa-cart-shopping mr-2"></i> Pemesanan
     </div>
     <h1 class="page-title mb-5" style="animation:fadeUp 0.5s 0.1s ease both">
-      KONTAK &<br/><span class="grad">LOKASI</span>
+      PESAN &<br/><span class="grad">JASA</span>
     </h1>
     <p class="text-base leading-relaxed max-w-xl mx-auto" style="color:#334e68;animation:fadeUp 0.5s 0.2s ease both">
       Kami siap melayani konsultasi, penawaran, dan survei lapangan. Hubungi kami melalui salah satu saluran berikut atau kunjungi kantor kami langsung.
@@ -253,57 +253,49 @@
       <!-- RIGHT: FORM -->
       <div class="reveal d2">
         <h2 class="font-black text-2xl mb-6" style="font-family:'Bebas Neue',sans-serif;color:#0c2d48;letter-spacing:0.03em">
-          Kirim <span class="grad">Pesan</span>
+          Form Formulir <span class="grad">Pemesanan</span>
         </h2>
         <div class="form-wrap">
-          <form id="contactForm" onsubmit="submitForm(event)">
-            <div class="grid grid-cols-2 gap-4">
-              <div class="form-group col-span-2 sm:col-span-1">
-                <label class="form-label">Nama Lengkap <span>*</span></label>
-                <input type="text" class="form-input" placeholder="Nama Anda" required/>
-              </div>
-              <div class="form-group col-span-2 sm:col-span-1">
-                <label class="form-label">Nama Perusahaan</label>
-                <input type="text" class="form-input" placeholder="PT. / CV. / Instansi"/>
-              </div>
+          <form id="contactForm" action="{{ route('client.order.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="form-group border border-sky-100 p-4 rounded-xl mb-4 bg-sky-50/50">
+              <label class="form-label" style="font-size:0.9rem; color:#0284c7">Rekening Pembayaran Bank BCA</label>
+              <div class="font-bold text-xl text-slate-800">8220 123 456</div>
+              <div class="text-xs text-slate-500">a.n PT. Transtech Tamiang Diraja</div>
             </div>
-            <div class="grid grid-cols-2 gap-4">
-              <div class="form-group col-span-2 sm:col-span-1">
-                <label class="form-label">Nomor Telepon <span>*</span></label>
-                <input type="tel" class="form-input" placeholder="08xx-xxxx-xxxx" required/>
-              </div>
-              <div class="form-group col-span-2 sm:col-span-1">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-input" placeholder="email@contoh.com"/>
-              </div>
-            </div>
+
             <div class="form-group">
               <label class="form-label">Layanan yang Dibutuhkan <span>*</span></label>
-              <select class="form-select form-input" required>
+              <select name="service_id" class="form-select form-input" required>
                 <option value="" disabled selected>-- Pilih Layanan --</option>
-                <option>Pemasangan / Perawatan / Perbaikan AC & Chiller</option>
-                <option>Perbaikan & Perawatan Genset</option>
-                <option>Konstruksi Bangunan Sipil & Renovasi</option>
-                <option>Design Interior</option>
-                <option>Electrical & Mechanical Repair</option>
-                <option>Cleaning Service / Jasa Tenaga Kerja</option>
-                <option>General Supplier / Musicool Refrigerant</option>
-                <option>Lainnya</option>
+                @foreach($services as $service)
+                  <option value="{{ $service->id }}">{{ $service->name }} @if($service->price)- Rp {{ number_format($service->price, 0, ',', '.') }}@endif</option>
+                @endforeach
               </select>
             </div>
+            
             <div class="form-group">
-              <label class="form-label">Pesan / Keterangan <span>*</span></label>
-              <textarea class="form-textarea" placeholder="Ceritakan kebutuhan Anda secara singkat — lokasi, jenis pekerjaan, atau pertanyaan yang ingin disampaikan..." required></textarea>
+              <label class="form-label">Alamat Lengkap <span>*</span></label>
+              <textarea name="address" class="form-textarea" placeholder="Masukkan alamat lengkap lokasi pengerjaan..." required>{{ old('address') }}</textarea>
             </div>
-            <button type="submit" class="btn-submit">
-              <i class="fa-solid fa-paper-plane"></i>
-              Kirim Pesan Sekarang
+            
+            <div class="form-group">
+              <label class="form-label">Bukti Pembayaran / Transfer <span>*</span></label>
+              <input type="file" name="receipt" class="form-input" accept="image/*" required style="padding-top:8px;" />
+            </div>
+
+            <button type="submit" class="btn-submit mt-4">
+              <i class="fa-solid fa-cart-arrow-down"></i>
+              Beli Layanan Sekarang
             </button>
           </form>
-          <div id="form-success" class="flex">
-            <i class="fa-solid fa-circle-check text-xl flex-shrink-0"></i>
-            Pesan Anda berhasil dikirim! Tim kami akan menghubungi Anda segera.
-          </div>
+          
+          @if(session('success'))
+            <div id="form-success" class="flex" style="display: flex;">
+              <i class="fa-solid fa-circle-check text-xl flex-shrink-0"></i>
+              {{ session('success') }}
+            </div>
+          @endif
         </div>
       </div>
 
@@ -363,16 +355,5 @@
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.08 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
-  function submitForm(e) {
-    e.preventDefault();
-    const btn = e.target.querySelector('.btn-submit');
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengirim...';
-    btn.disabled = true;
-    setTimeout(() => {
-      e.target.style.display = 'none';
-      document.getElementById('form-success').style.display = 'flex';
-    }, 1500);
-  }
 </script>
 @endpush

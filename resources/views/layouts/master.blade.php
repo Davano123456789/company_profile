@@ -192,19 +192,44 @@
 
 @include('layouts.footer')
 
-<script>
-  function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  <script>
+    function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
 
-  setTimeout(() => {
-    const el = document.getElementById('heroCard');
-    if (el) { el.style.opacity = '1'; el.style.transition = 'opacity 0.8s ease'; }
-  }, 500);
-</script>
-@stack('scripts')
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    setTimeout(() => {
+      const el = document.getElementById('heroCard');
+      if (el) { el.style.opacity = '1'; el.style.transition = 'opacity 0.8s ease'; }
+    }, 500);
+
+    // Notifikasi Sesi
+    document.addEventListener('DOMContentLoaded', function() {
+      @if(session('success'))
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil!',
+          text: "{{ session('success') }}",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true
+        });
+      @endif
+
+      @if(session('error') || $errors->any())
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: "{{ session('error') ?: $errors->first() }}",
+        });
+      @endif
+    });
+  </script>
+  @stack('scripts')
 </body>
 </html>

@@ -117,7 +117,7 @@
     </div>
 
     <div class="auth-title text-center">Buat Akun Baru</div>
-    <div class="auth-sub text-center">Daftarkan akun admin untuk mengakses panel admin</div>
+    <div class="auth-sub text-center">Daftarkan akun Anda untuk menjadi bagian dari klien kami</div>
 
     @if($errors->any())
       <div class="alert alert-danger">
@@ -146,7 +146,7 @@
         <label>Email</label>
         <div class="input-icon">
           <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                 value="{{ old('email') }}" placeholder="admin@example.com" required>
+                 value="{{ old('email') }}" placeholder="email@example.com" required>
           <i class="ti-email"></i>
         </div>
         @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror

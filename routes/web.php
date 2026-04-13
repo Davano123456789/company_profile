@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OrderController;
 
 Route::get('/', [FrontController::class, 'index'])->name('home');
 Route::get('/tentang-kami', [FrontController::class, 'about'])->name('about');
@@ -12,8 +13,6 @@ Route::get('/layanan', [FrontController::class, 'services'])->name('services');
 Route::get('/portofolio', [FrontController::class, 'portfolio'])->name('portfolio');
 Route::get('/klien', [FrontController::class, 'clients'])->name('clients');
 Route::get('/sertifikasi', [FrontController::class, 'certifications'])->name('certifications');
-Route::get('/kontak', [FrontController::class, 'contact'])->name('contact');
-
 // ─── AUTHENTICATION ──────────────────────────────────────────────────────────
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -22,6 +21,14 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'registerPost'])->name('register.post');
 });
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// ─── CLIENT DASHBOARD ────────────────────────────────────────────────────────
+Route::middleware('auth')->group(function () {
+    Route::get('/pesan-jasa', [OrderController::class, 'create'])->name('pesan-jasa');
+    Route::get('/client/dashboard', [OrderController::class, 'index'])->name('client.dashboard');
+    Route::post('/client/order', [OrderController::class, 'store'])->name('client.order.store');
+    Route::post('/client/order/{order}/complete', [OrderController::class, 'complete'])->name('client.order.complete');
+});
 
 // ─── DASHBOARD ───────────────────────────────────────────────────────────────
 // prefix adalah untuk membuat url menjadi /admin/...
@@ -59,6 +66,24 @@ Route::prefix('admin')->name('dashboard.')->middleware('auth')->group(function (
         Route::get('/{projectCategory}/edit', [DashboardController::class, 'categoriesEdit'])->name('edit');
         Route::put('/{projectCategory}', [DashboardController::class, 'categoriesUpdate'])->name('update');
         Route::delete('/{projectCategory}', [DashboardController::class, 'categoriesDestroy'])->name('destroy');
+    });
+
+    // Orders
+    Route::prefix('orders')->name('orders.')->group(function () {
+        Route::get('/', [DashboardController::class, 'ordersIndex'])->name('index');
+        Route::post('/{order}/confirm', [DashboardController::class, 'ordersConfirm'])->name('confirm');
+        Route::post('/{order}/complete', [DashboardController::class, 'ordersComplete'])->name('complete');
+        Route::post('/{order}/reject', [DashboardController::class, 'ordersReject'])->name('reject');
+    });
+
+    // Services
+    Route::prefix('services')->name('services.')->group(function () {
+        Route::get('/', [DashboardController::class, 'servicesIndex'])->name('index');
+        Route::get('/create', [DashboardController::class, 'servicesCreate'])->name('create');
+        Route::post('/', [DashboardController::class, 'servicesStore'])->name('store');
+        Route::get('/{service}/edit', [DashboardController::class, 'servicesEdit'])->name('edit');
+        Route::put('/{service}', [DashboardController::class, 'servicesUpdate'])->name('update');
+        Route::delete('/{service}', [DashboardController::class, 'servicesDestroy'])->name('destroy');
     });
 
 });

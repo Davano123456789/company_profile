@@ -48,13 +48,18 @@ class AuthController extends Controller
         ]);
 
         // membuat akun di database
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'client',
         ]);
-        // mengembalikan ke halaman login dengan membawa pesan sukses
-        return redirect()->route('login')->with('success', 'Registrasi berhasil, silakan login.');
+
+        // Langsung login setelah registrasi
+        Auth::login($user);
+
+        // Mengalihkan ke halaman beranda dengan membawa pesan sukses
+        return redirect()->route('home')->with('success', 'Registrasi berhasil! Selamat datang di PT. Transtech Tamiang Diraja.');
     }
 
     public function logout(Request $request)
